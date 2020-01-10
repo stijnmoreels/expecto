@@ -380,6 +380,26 @@ testList "Setup & teardown 3" [
 ]
 ```
 
+- `testFixtureAsync : ('a -> Async<unit>) -> (seq<string * 'a>) -> seq<Test>`
+
+The test fixture takes a asynchronous factory and a sequence of partial asynchronous tests.
+The `'a` parameter will be inferred to the *function type*, such as
+`MemoryStream -> Async<'a>`.
+
+```fsharp
+testList "Setup & teardown 4" [
+  let withMemoryStreamAsync f = async {
+    use ms = new MemoryStream()
+    do! f ms }
+    yield! testFixtureAsync withMemoryStreamAsync [
+      "can read", 
+        fun ms -> async { return ms.CanRead ==? true }
+      "can write", 
+        fun ms -> async { return ms.CanWrite ==? true }
+    ]
+  ]
+```
+
 ### Pending tests
 
 - `ptestCase`

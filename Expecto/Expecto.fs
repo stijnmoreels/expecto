@@ -1284,6 +1284,11 @@ module Tests =
     Seq.map (fun (name, partialTest) ->
       testCase name (setup partialTest))
 
+  /// Applies a asynchronous function to list of build asynchronous test cases
+  let inline testFixtureAsync setupAsync =
+    Seq.map (fun (name, partialTest) ->
+      testCaseAsync name (setupAsync partialTest))
+
   /// Applies a value to a list of partial tests
   let inline testParam param =
     Seq.map (fun (name, partialTest) ->

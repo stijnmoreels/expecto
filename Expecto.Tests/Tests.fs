@@ -247,6 +247,18 @@ let expecto =
       ]
     ]
 
+    testList "Setup & teardown 4" [
+      let withMemoryStreamAsync f = async {
+        use ms = new MemoryStream()
+        do! f ms }
+      yield! testFixtureAsync withMemoryStreamAsync [
+        "can read", 
+          fun ms -> async { return ms.CanRead ==? true }
+        "can write", 
+          fun ms -> async { return ms.CanWrite ==? true }
+      ]
+    ]
+
     testList "testParam 1" (
       testParam 1333 [
         "First sample",
